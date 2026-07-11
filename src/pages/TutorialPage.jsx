@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { Play, Eye, RotateCcw } from "lucide-react";
 import Header from "../components/Header";
-import TutorialSidebar from "../components/TutorialSidebar";
+import TutorialSidebar from "../components/Tutorialsidebar";
 import ResizableSplit from "../components/ResizableSplit";
 import CodeEditor from "../components/CodeEditor";
 import { TUTORIALS } from "../data/tutorial_data.js";

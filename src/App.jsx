@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import BeginnerPage from "./pages/BeginnerPage";
 import TutorialPage from "./pages/TutorialPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/beginner" element={<BeginnerPage />} />
         <Route path="/experienced" element={<ExperiencedPage />} />
         <Route path="/tutorial/:tutorialId" element={<TutorialPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
