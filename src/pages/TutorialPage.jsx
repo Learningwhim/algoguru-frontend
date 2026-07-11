@@ -62,14 +62,14 @@ export default function TutorialPage() {
 
   if (!tutorial || !activeStep) {
     return (
-      <div className="min-h-screen bg-[#0B0B0A] flex items-center justify-center text-white/50">
+      <div className="min-h-screen bg-[#D8E7F2] dark:bg-[#0B0B0A] flex items-center justify-center text-[#5B6E8C] dark:text-white/50">
         Tutorial not found.
       </div>
     );
   }
 
   return (
-    <div className="h-screen w-full bg-[#0B0B0A] flex flex-col">
+    <div className="h-screen w-full bg-gradient-to-br from-[#CBDFEF] via-[#D2E4F1] to-[#D7E6F0] dark:from-[#0B0B0A] dark:via-[#0B0B0A] dark:to-[#0B0B0A] flex flex-col">
       <Header
         step={steps.findIndex((s) => s.id === activeId) + 1}
         totalSteps={steps.length}
@@ -97,10 +97,10 @@ export default function TutorialPage() {
                 >
                   {activeStep.title}
                 </p>
-                <h1 className="text-white text-xl font-medium mb-4">
+                <h1 className="text-[#16223A] dark:text-white text-xl font-medium mb-4">
                   {tutorial.title}
                 </h1>
-                <p className="text-white/70 text-sm leading-relaxed whitespace-pre-line">
+                <p className="text-[#5B6E8C] dark:text-white/70 text-sm leading-relaxed whitespace-pre-line">
                   {activeStep.description}
                 </p>
               </div>
@@ -114,11 +114,11 @@ export default function TutorialPage() {
                 max={85}
                 left={<CodeEditor value={code} onChange={setCode} />}
                 right={
-                  <div className="h-full bg-[#0E0E0D] p-4 overflow-auto">
-                    <p className="text-white/30 text-xs uppercase tracking-wide mb-2">
+                  <div className="h-full bg-[#F3F8FC] dark:bg-[#0E0E0D] p-4 overflow-auto">
+                    <p className="text-[#5B6E8C]/70 dark:text-white/30 text-xs uppercase tracking-wide mb-2">
                       Console
                     </p>
-                    <pre className="text-white/70 text-sm whitespace-pre-wrap font-mono">
+                    <pre className="text-[#5B6E8C] dark:text-white/70 text-sm whitespace-pre-wrap font-mono">
                       {output || "Run your code to see output here."}
                     </pre>
                   </div>
@@ -129,7 +129,7 @@ export default function TutorialPage() {
         </div>
       </div>
 
-      <div className="shrink-0 border-t border-white/10 px-6 py-3 flex items-center gap-3 bg-[#0B0B0A]">
+      <div className="shrink-0 border-t border-[#16223A]/10 dark:border-white/10 px-6 py-3 flex items-center gap-3 bg-[#EAF3FA] dark:bg-[#0B0B0A]">
         <button
           onClick={handleRun}
           className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
@@ -141,7 +141,7 @@ export default function TutorialPage() {
 
         <button
           onClick={handleShowSolution}
-          className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white/70 bg-white/[0.06] hover:bg-white/[0.1] transition-colors"
+          className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[#5B6E8C] dark:text-white/70 bg-[#16223A]/[0.06] dark:bg-white/[0.06] hover:bg-[#16223A]/[0.1] dark:hover:bg-white/[0.1] transition-colors"
         >
           <Eye size={15} />
           Show solution
@@ -149,7 +149,7 @@ export default function TutorialPage() {
 
         <button
           onClick={handleReset}
-          className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white/70 bg-white/[0.06] hover:bg-white/[0.1] transition-colors"
+          className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-[#5B6E8C] dark:text-white/70 bg-[#16223A]/[0.06] dark:bg-white/[0.06] hover:bg-[#16223A]/[0.1] dark:hover:bg-white/[0.1] transition-colors"
         >
           <RotateCcw size={15} />
           Reset editor

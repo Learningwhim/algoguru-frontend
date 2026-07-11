@@ -5,24 +5,29 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import GridBackground from "../components/GridBackground";
 import { TUTORIALS } from "../data/tutorial_data.js";
+import { useTheme } from "../context/ThemeContext";
 // Hardcoded for now — move to a tutorials.json / backend call once
 
 export default function BeginnerPage() {
   const navigate = useNavigate();
+  const { isDark } = useTheme();
   const [hovered, setHovered] = useState(null);
+  // title = higher priority (near-black-navy), desc = lower priority (slate blue)
+  const titleRGB = isDark ? "255,255,255" : "22,34,58";
+  const descRGB = isDark ? "255,255,255" : "91,110,140";
 
   return (
-    <div className="relative min-h-screen w-full bg-[#0B0B0A] flex flex-col">
+    <div className="relative min-h-screen w-full bg-gradient-to-br from-[#CBDFEF] via-[#D2E4F1] to-[#D7E6F0] dark:from-[#0B0B0A] dark:via-[#0B0B0A] dark:to-[#0B0B0A] flex flex-col">
       <GridBackground />
       <div className="relative z-10 flex flex-col flex-1">
         <Header />
 
         <main className="flex-1 px-6 py-12 flex flex-col items-center">
           <div className="max-w-xl text-center mb-12">
-            <h1 className="text-white text-3xl md:text-4xl font-medium tracking-tight mb-3">
+            <h1 className="text-[#16223A] dark:text-white text-3xl md:text-4xl font-medium tracking-tight mb-3">
               Pick a tutorial to start with
             </h1>
-            <p className="text-white/50 text-base">
+            <p className="text-[#5B6E8C] dark:text-white/50 text-base">
               Each one builds on the last, but you can jump into whichever
               sounds most useful right now.
             </p>
@@ -96,14 +101,14 @@ export default function BeginnerPage() {
 
                     <h2
                       className="text-lg font-medium mb-3 transition-colors duration-300"
-                      style={{ color: isHovered ? t.accent : "rgba(255,255,255,0.92)" }}
+                      style={{ color: isHovered ? t.accent : `rgba(${titleRGB},0.92)` }}
                     >
                       {t.title}
                     </h2>
 
                     <p
                       className="text-sm leading-relaxed"
-                      style={{ color: "rgba(255,255,255,0.55)" }}
+                      style={{ color: `rgba(${descRGB},0.85)` }}
                     >
                       {t.desc}
                     </p>
@@ -117,7 +122,7 @@ export default function BeginnerPage() {
                     className="relative cursor-pointer flex items-center justify-center gap-2 mt-8 text-sm font-medium py-2.5 rounded-lg transition-all duration-300"
                     style={{
                       backgroundColor: isHovered ? `${t.accent}3D` : `${t.accent}1A`,
-                      color: isHovered ? "#ffffff" : t.accent,
+                      color: isHovered ? (isDark ? "#ffffff" : "#16223A") : t.accent,
                     }}
                   >
                     Enroll

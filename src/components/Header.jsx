@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { User } from "lucide-react";
+import { User, Sun, Moon } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
 /**
  * Sticky top header. Reused across every page (Beginner, Project, etc).
@@ -8,28 +9,47 @@ import { User } from "lucide-react";
  */
 export default function Header({ step, totalSteps }) {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
-    <header className="sticky top-0 z-50 w-full px-8 py-4 flex items-center justify-between bg-[#0B0B0A]/90 backdrop-blur-sm border-b border-white/10">
+    <header className="sticky top-0 z-50 w-full px-8 py-4 flex items-center justify-between bg-[#EAF3FA]/90 dark:bg-[#0B0B0A]/90 backdrop-blur-sm border-b border-[#16223A]/10 dark:border-white/10">
       <span
         onClick={() => navigate("/")}
-        className="text-white font-medium tracking-tight text-lg cursor-pointer select-none"
+        className="text-[#16223A] dark:text-white font-medium tracking-tight text-lg cursor-pointer select-none"
       >
         algoguru
       </span>
 
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-3">
         {step && (
-          <span className="text-white/40 text-sm hidden sm:inline">
+          <span className="text-[#5B6E8C]/80 dark:text-white/40 text-sm hidden sm:inline mr-2">
             Step {step} of {totalSteps}
           </span>
         )}
 
         <button
-          className="w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
+          onClick={toggleTheme}
+          className="cursor-pointer w-9 h-9 rounded-full bg-[#16223A]/[0.06] dark:bg-white/[0.06] border border-[#16223A]/10 dark:border-white/10 flex items-center justify-center hover:bg-[#16223A]/[0.1] dark:hover:bg-white/[0.1] transition-colors"
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {isDark ? (
+            <Sun size={16} strokeWidth={1.75} color="#ffffff" />
+          ) : (
+            <Moon size={16} strokeWidth={1.75} color="#16223A" />
+          )}
+        </button>
+
+        <button
+          className="w-9 h-9 rounded-full bg-[#16223A]/[0.06] dark:bg-white/[0.06] border border-[#16223A]/10 dark:border-white/10 flex items-center justify-center hover:bg-[#16223A]/[0.1] dark:hover:bg-white/[0.1] transition-colors"
           aria-label="Account"
         >
-          <User size={16} strokeWidth={1.75} color="#ffffff" />
+          <User
+            size={16}
+            strokeWidth={1.75}
+            color={isDark ? "#ffffff" : "#16223A"}
+          />
         </button>
       </div>
     </header>

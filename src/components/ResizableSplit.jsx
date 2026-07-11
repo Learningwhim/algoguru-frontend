@@ -93,7 +93,7 @@ export default function ResizableSplit({
         }`}
       >
         <div
-          className={`absolute bg-white/10 group-hover:bg-white/30 transition-colors ${
+          className={`absolute bg-[#16223A]/10 dark:bg-white/10 group-hover:bg-[#16223A]/30 dark:group-hover:bg-white/30 transition-colors ${
             isHorizontal
               ? "inset-y-0 left-1/2 -translate-x-1/2 w-px"
               : "inset-x-0 top-1/2 -translate-y-1/2 h-px"

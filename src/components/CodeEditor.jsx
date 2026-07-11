@@ -1,36 +1,22 @@
 import { Editor } from "@monaco-editor/react";
+import { useTheme } from "../context/ThemeContext";
 
 /**
- * Monaco-based code editor, themed to match the app's dark UI.
+ * Monaco-based code editor, themed to match the app's current light/dark UI.
  * Drop-in for the TutorialPage editor pane — just needs `value` / `onChange`.
  *
  * Install first:  npm install @monaco-editor/react
  */
 export default function CodeEditor({ value, onChange, language = "python" }) {
+  const { isDark } = useTheme();
+
   return (
     <Editor
       height="100%"
       language={language}
       value={value}
       onChange={(val) => onChange(val ?? "")}
-      theme="vs-dark"
-    //   beforeMount={(monaco) => {
-    //     monaco.editor.defineTheme("algoguru-dark", {
-    //       base: "vs-dark",
-    //       inherit: true,
-    //       rules: [],
-    //       colors: {
-    //         "editor.background": "#0B0B0A",
-    //         "editor.lineHighlightBackground": "#161615",
-    //         "editorLineNumber.foreground": "#4A4A48",
-    //         "editorLineNumber.activeForeground": "#8A8A87",
-    //         "editorGutter.background": "#0B0B0A",
-    //         "editor.selectionBackground": "#2A2A28",
-    //         "scrollbarSlider.background": "#22222080",
-    //         "scrollbarSlider.hoverBackground": "#2A2A28",
-    //       },
-    //     });
-    //   }}
+      theme={isDark ? "vs-dark" : "light"}
       options={{
         fontSize: 14,
         fontFamily:
@@ -48,7 +34,7 @@ export default function CodeEditor({ value, onChange, language = "python" }) {
         scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8 },
       }}
       loading={
-        <div className="w-full h-full flex items-center justify-center bg-[#0B0B0A] text-white/30 text-sm">
+        <div className="w-full h-full flex items-center justify-center bg-[#F3F8FC] dark:bg-[#0B0B0A] text-[#5B6E8C]/70 dark:text-white/30 text-sm">
           Loading editor...
         </div>
       }
