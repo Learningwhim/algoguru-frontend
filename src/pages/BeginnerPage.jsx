@@ -46,11 +46,13 @@ export default function BeginnerPage() {
                   onMouseLeave={() => setHovered(null)}
                   className="group relative cursor-pointer rounded-2xl p-7 border transition-all duration-300 flex flex-col justify-between min-h-[300px] overflow-hidden"
                   style={{
-                    backgroundColor: isHovered ? `${t.accent}1F` : `${t.accent}0D`,
+                    backgroundColor: isDark ? "#131311" : "#FFFFFF",
                     borderColor: isHovered ? `${t.accent}99` : `${t.accent}40`,
                     boxShadow: isHovered
                       ? `0 0 0 1px ${t.accent}30, 0 20px 45px -20px ${t.accent}66`
-                      : "none",
+                      : isDark
+                      ? "0 10px 30px -14px rgba(0,0,0,0.6)"
+                      : "0 10px 30px -14px rgba(22,34,58,0.18)",
                   }}
                 >
                   {/* Ambient glow anchored to the top edge — always present,

@@ -7,7 +7,12 @@ import { useTheme } from "../context/ThemeContext";
  *
  * Install first:  npm install @monaco-editor/react
  */
-export default function CodeEditor({ value, onChange, language = "python" }) {
+export default function CodeEditor({
+  value,
+  onChange,
+  language = "python",
+  readOnly = false,
+}) {
   const { isDark } = useTheme();
 
   return (
@@ -15,7 +20,7 @@ export default function CodeEditor({ value, onChange, language = "python" }) {
       height="100%"
       language={language}
       value={value}
-      onChange={(val) => onChange(val ?? "")}
+      onChange={(val) => onChange?.(val ?? "")}
       theme={isDark ? "vs-dark" : "light"}
       options={{
         fontSize: 14,
@@ -28,9 +33,11 @@ export default function CodeEditor({ value, onChange, language = "python" }) {
         smoothScrolling: true,
         cursorSmoothCaretAnimation: "on",
         automaticLayout: true,
-        renderLineHighlight: "line",
+        renderLineHighlight: readOnly ? "none" : "line",
         overviewRulerLanes: 0,
         hideCursorInOverviewRuler: true,
+        readOnly,
+        domReadOnly: readOnly,
         scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8 },
       }}
       loading={

@@ -13,7 +13,7 @@ export default function Header({ step, totalSteps }) {
   const isDark = theme === "dark";
 
   return (
-    <header className="sticky top-0 z-50 w-full px-8 py-4 flex items-center justify-between bg-[#EAF3FA]/90 dark:bg-[#0B0B0A]/90 backdrop-blur-sm border-b border-[#16223A]/10 dark:border-white/10">
+    <header className="sticky top-0 z-50 w-full px-8 py-4 flex items-center justify-between bg-gradient-to-b from-[#EAF3FA] via-[#EAF3FA]/70 to-transparent dark:from-[#0B0B0A] dark:via-[#0B0B0A]/70 dark:to-transparent backdrop-blur-sm">
       <span
         onClick={() => navigate("/")}
         className="text-[#16223A] dark:text-white font-medium tracking-tight text-lg cursor-pointer select-none"
