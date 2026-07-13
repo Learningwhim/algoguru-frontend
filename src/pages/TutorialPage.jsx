@@ -15,6 +15,7 @@ import Header from "../components/Header";
 import TutorialSidebar from "../components/Tutorialsidebar";
 import ResizableSplit from "../components/ResizableSplit";
 import CodeEditor from "../components/CodeEditor";
+import StepContent from "../components/StepContent";
 import { TUTORIALS } from "../data/tutorial_data.js";
 import { STEP_DATA } from "../data/step_data.js";
 import { getStarterCode, getSolutionCode, executeCode } from "../lib/api";
@@ -270,9 +271,10 @@ export default function TutorialPage() {
                     <h1 className="text-[#16223A] dark:text-white text-xl font-medium mb-4">
                       {tutorial.title}
                     </h1>
-                    <p className="text-[#5B6E8C] dark:text-white/70 text-sm leading-relaxed whitespace-pre-line">
-                      {activeStep.description}
-                    </p>
+                    <StepContent
+                      content={activeStep.description}
+                      accent={tutorial.accent}
+                    />
                   </div>
 
                   <div
