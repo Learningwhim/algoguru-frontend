@@ -178,6 +178,8 @@ export default function StepContent({ content, accent }) {
           </div>
         );
       })}
+      <br/>
+      <br/>
     </div>
   );
 }
