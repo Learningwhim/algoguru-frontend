@@ -2,25 +2,18 @@ import { useState } from "react";
 import { CheckCircle2, Circle, Lock, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 
-/**
- * Left sidebar for the tutorial page. `steps` is the hardcoded step list
- * for the current tutorial, `completedIds` is a Set of step ids the user
- * has finished, `activeId` is the step currently open.
- *
- * A step is locked if the step before it isn't completed yet.
- * Collapsible: shrinks to an icon rail so the editor gets more room.
- */
 export default function TutorialSidebar({
   tutorial,
   steps,
   completedIds,
   activeId,
   onSelectStep,
+  mobileOpen = false,
 }) {
   const { isDark } = useTheme();
   const [collapsed, setCollapsed] = useState(false);
   const completedCount = completedIds.size;
-  const progressPct = Math.round((completedCount / steps.length) * 100);
+  const progressPct = steps.length > 0 ? Math.round((completedCount / steps.length) * 100) : 0;
 
   const isLocked = (index) => {
     if (index === 0) return false;
@@ -29,18 +22,20 @@ export default function TutorialSidebar({
 
   return (
     <aside
-      className={`shrink-0 h-full border-r border-[#16223A]/10 dark:border-white/10 bg-[#F5FAFE] dark:bg-[#101010] flex flex-col transition-[width] duration-300 ${
+      className={`shrink-0 h-full border-r border-[#16223A]/10 dark:border-white/10 bg-[#F5FAFE] dark:bg-[#101010] flex flex-col transition-all duration-300 absolute z-40 md:relative ${
         collapsed ? "w-14" : "w-72"
+      } ${
+        mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
       }`}
     >
       <div className="px-3 py-4 border-b border-[#16223A]/10 dark:border-white/10 flex items-center justify-between shrink-0">
         {!collapsed && (
           <div className="min-w-0 pr-2">
             <p className="text-[#5B6E8C] dark:text-white/40 text-[11px] uppercase tracking-wide mb-0.5 truncate">
-              {tutorial.subtitle}
+              {tutorial?.subtitle}
             </p>
             <p className="text-[#16223A] dark:text-white text-sm font-medium truncate">
-              {tutorial.title}
+              {tutorial?.title}
             </p>
           </div>
         )}
@@ -65,7 +60,7 @@ export default function TutorialSidebar({
           <div className="w-full h-1.5 rounded-full bg-[#16223A]/10 dark:bg-white/10 overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-300"
-              style={{ width: `${progressPct}%`, backgroundColor: tutorial.accent }}
+              style={{ width: `${progressPct}%`, backgroundColor: tutorial?.accent || "#3b82f6" }}
             />
           </div>
         </div>
@@ -88,7 +83,7 @@ export default function TutorialSidebar({
                 cy="18"
                 r="15.5"
                 fill="none"
-                stroke={tutorial.accent}
+                stroke={tutorial?.accent || "#3b82f6"}
                 strokeWidth="3"
                 strokeDasharray={2 * Math.PI * 15.5}
                 strokeDashoffset={2 * Math.PI * 15.5 * (1 - progressPct / 100)}
@@ -109,7 +104,7 @@ export default function TutorialSidebar({
           const active = step.id === activeId;
 
           const icon = done ? (
-            <CheckCircle2 size={16} color={tutorial.accent} />
+            <CheckCircle2 size={16} color={tutorial?.accent || "#3b82f6"} />
           ) : locked ? (
             <Lock
               size={14}

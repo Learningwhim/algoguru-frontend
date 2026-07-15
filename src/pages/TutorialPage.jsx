@@ -12,19 +12,14 @@ import {
   Trophy,
 } from "lucide-react";
 import Header from "../components/Header";
-import TutorialSidebar from "../components/Tutorialsidebar";
+import TutorialSidebar from "../components/TutorialSidebar"; 
 import ResizableSplit from "../components/ResizableSplit";
 import CodeEditor from "../components/CodeEditor";
 import StepContent from "../components/StepContent";
 import { TUTORIALS } from "../data/tutorial_data.js";
 import { STEP_DATA } from "../data/step_data.js";
 import { getStarterCode, getSolutionCode, executeCode } from "../lib/api";
-// Hardcoded step content per tutorial — same idea as TUTORIALS in
-// BeginnerPage, move to a real data source later.
 
-// Only this tutorial has real backend content right now (the FastAPI
-// "image_classification" project). Everything else keeps using the
-// hardcoded STEP_DATA above until a backend project exists for it.
 const BACKEND_LINKED_TUTORIALS = ["image-classification"];
 
 export default function TutorialPage() {
@@ -35,9 +30,10 @@ export default function TutorialPage() {
   const isBackendLinked = BACKEND_LINKED_TUTORIALS.includes(tutorialId);
 
   const [activeId, setActiveId] = useState(steps[0]?.id);
-  const [leftTab, setLeftTab] = useState("description"); // "description" | "solution"
+  const [leftTab, setLeftTab] = useState("description"); 
   const [solutionRevealed, setSolutionRevealed] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); 
   const [completedIds, setCompletedIds] = useState(() => {
     const saved = localStorage.getItem(`completed:${tutorialId}`);
     return saved ? new Set(JSON.parse(saved)) : new Set();
@@ -58,10 +54,8 @@ export default function TutorialPage() {
 
   const [output, setOutput] = useState("");
   const [running, setRunning] = useState(false);
-  const [runResult, setRunResult] = useState(null); // { success, message, errors }
+  const [runResult, setRunResult] = useState(null); 
 
-  // Fetch starter code from the backend whenever the active step changes
-  // (backend-linked tutorials only — others just use the hardcoded value).
   useEffect(() => {
     if (!activeStep) return;
 
@@ -81,7 +75,7 @@ export default function TutorialPage() {
       .catch((err) => {
         if (!cancelled) {
           setCodeError(err.message);
-          setCode(activeStep.starterCode ?? ""); // fall back to hardcoded copy
+          setCode(activeStep.starterCode ?? ""); 
         }
       })
       .finally(() => {
@@ -93,7 +87,6 @@ export default function TutorialPage() {
     };
   }, [activeId, isBackendLinked, tutorialId, activeStep]);
 
-  // Lazily fetch the solution once the person actually reveals it.
   useEffect(() => {
     if (!activeStep || !solutionRevealed) return;
 
@@ -132,16 +125,16 @@ export default function TutorialPage() {
     setSolutionRevealed(false);
     setSolutionCode("");
     setRunResult(null);
+    setMobileMenuOpen(false); // Close menu when a new step is clicked
   };
 
   const markComplete = () => {
     setCompletedIds((prev) => {
-      if (prev.has(activeId)) return prev; // already counted, no re-trigger
+      if (prev.has(activeId)) return prev; 
       const next = new Set(prev).add(activeId);
       localStorage.setItem(`completed:${tutorialId}`, JSON.stringify([...next]));
 
       if (next.size === steps.length && prev.size < steps.length) {
-        // Fresh completion of the whole tutorial — celebrate it.
         setShowCompletionModal(true);
       }
       return next;
@@ -150,7 +143,6 @@ export default function TutorialPage() {
 
   const handleRun = async () => {
     if (!isBackendLinked) {
-      // No backend project for this tutorial yet.
       setOutput("Running...\n(connect this to your code execution service)");
       markComplete();
       return;
@@ -178,7 +170,6 @@ export default function TutorialPage() {
 
   const handleReset = () => {
     if (isBackendLinked) {
-      // Re-trigger the starter-code fetch effect.
       setCode("");
       getStarterCode(tutorialId, activeStep.id)
         .then(setCode)
@@ -201,30 +192,40 @@ export default function TutorialPage() {
   const solutionToShow = isBackendLinked ? solutionCode : activeStep.solutionCode ?? "";
 
   return (
-    <div className="h-screen w-full bg-gradient-to-br from-[#CBDFEF] via-[#D2E4F1] to-[#D7E6F0] dark:from-[#0B0B0A] dark:via-[#0B0B0A] dark:to-[#0B0B0A] flex flex-col">
+    <div className="h-screen w-full bg-gradient-to-br from-[#CBDFEF] via-[#D2E4F1] to-[#D7E6F0] dark:from-[#0B0B0A] dark:via-[#0B0B0A] dark:to-[#0B0B0A] flex flex-col overflow-hidden text-sm">
       <Header
         step={steps.findIndex((s) => s.id === activeId) + 1}
         totalSteps={steps.length}
+        onMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
       />
 
-      <div className="flex-1 flex min-h-0">
+      <div className="flex-1 flex min-h-0 relative">
+        
+        {/* Mobile Overlay Background (click to close) */}
+        {mobileMenuOpen && (
+          <div
+            className="md:hidden absolute inset-0 bg-black/50 z-30"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+
         <TutorialSidebar
           tutorial={tutorial}
           steps={steps}
           completedIds={completedIds}
           activeId={activeId}
           onSelectStep={selectStep}
+          mobileOpen={mobileMenuOpen}
         />
 
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 min-h-0 flex flex-col w-full">
           <ResizableSplit
             storageKey="tutorial-desc-editor-split"
             direction="horizontal"
             defaultSize={40}
             left={
-              <div className="h-full p-3">
+              <div className="h-full p-2 md:p-3">
                 <div className="h-full flex flex-col rounded-2xl overflow-hidden border border-[#16223A]/10 dark:border-white/10 shadow-sm bg-white dark:bg-[#131311]">
-                {/* LeetCode-style tab bar */}
                 <div className="shrink-0 flex items-center gap-1 px-3 pt-2 border-b border-[#16223A]/10 dark:border-white/10 bg-[#F3F8FC] dark:bg-[#0E0E0D]">
                   {[
                     { key: "description", label: "Description", icon: FileText },
@@ -253,13 +254,10 @@ export default function TutorialPage() {
                   })}
                 </div>
 
-                {/* Tab content — both panels stay mounted; only visibility toggles.
-                    This avoids remounting the Monaco solution editor on every
-                    tab switch, which was causing it to render blank. */}
                 <div className="flex-1 min-h-0 overflow-auto relative">
                   <div
                     className={
-                      leftTab === "description" ? "h-full p-6" : "hidden"
+                      leftTab === "description" ? "h-full p-4 md:p-6" : "hidden"
                     }
                   >
                     <p
@@ -284,7 +282,7 @@ export default function TutorialPage() {
                         : "hidden"
                     }
                   >
-                    <div className="shrink-0 px-6 pt-4 pb-2">
+                    <div className="shrink-0 px-4 md:px-6 pt-4 pb-2">
                       <p className="text-[#5B6E8C]/70 dark:text-white/40 text-xs">
                         Reference solution for this step. Switch back to{" "}
                         <span className="font-medium">Description</span> to
@@ -340,7 +338,7 @@ export default function TutorialPage() {
                 min={40}
                 max={85}
                 left={
-                  <div className="h-full p-3 pr-1.5">
+                  <div className="h-full p-2 md:p-3 md:pr-1.5 pb-1 md:pb-3">
                     <div className="h-full flex flex-col rounded-2xl overflow-hidden border border-[#16223A]/10 dark:border-white/10 shadow-sm bg-white dark:bg-[#131311]">
                     <div className="shrink-0 flex items-center gap-2 px-3 py-2 border-b border-[#16223A]/10 dark:border-white/10 bg-[#F3F8FC] dark:bg-[#0E0E0D]">
                       <button
@@ -367,7 +365,7 @@ export default function TutorialPage() {
                       </button>
 
                       {codeError && (
-                        <span className="text-red-500 text-xs ml-1">
+                        <span className="text-red-500 text-xs ml-1 hidden md:inline">
                           Backend unreachable — showing local starter code.
                         </span>
                       )}
@@ -386,7 +384,7 @@ export default function TutorialPage() {
                   </div>
                 }
                 right={
-                  <div className="h-full p-3 pl-1.5">
+                  <div className="h-full p-2 md:p-3 md:pl-1.5 pt-1 md:pt-3">
                     <div className="h-full flex flex-col rounded-2xl overflow-hidden border border-[#16223A]/10 dark:border-white/10 shadow-sm bg-[#F3F8FC] dark:bg-[#0E0E0D]">
                     <div className="shrink-0 px-4 pt-4">
                       <p className="text-[#5B6E8C]/70 dark:text-white/30 text-xs uppercase tracking-wide mb-2">

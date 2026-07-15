@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from "react";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 /**
  * Resizable split — direction="horizontal" gives left/right panes (e.g.
@@ -6,10 +7,6 @@ import { useRef, useState, useCallback, useEffect } from "react";
  * (e.g. editor vs console). The split ratio persists to localStorage
  * under `storageKey` so it survives refresh/navigation, same as
  * LeetCode's adjustable layout.
- *
- * Usage:
- *   <ResizableSplit storageKey="project-split" left={<Description />} right={<EditorStack />} />
- *   <ResizableSplit direction="vertical" storageKey="editor-console" left={<Editor />} right={<Console />} />
  */
 export default function ResizableSplit({
   left,
@@ -22,7 +19,10 @@ export default function ResizableSplit({
 }) {
   const containerRef = useRef(null);
   const draggingRef = useRef(false);
-  const isHorizontal = direction === "horizontal";
+  
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const actualDirection = isMobile ? "vertical" : direction;
+  const isHorizontal = actualDirection === "horizontal";
 
   const [firstSize, setFirstSize] = useState(() => {
     const saved = Number(localStorage.getItem(storageKey));
